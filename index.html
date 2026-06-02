@@ -52,6 +52,10 @@
     .brand-logo { width: 86px; height: 38px; object-fit: contain; object-position:left center; }
     .brand strong { display:block; font-size: 15px; line-height: 1.05; }
     .brand span { display:block; font-size: 11px; color: var(--muted); font-weight: 700; }
+    .brand-partner {
+      border-left: 1px solid var(--line); padding-left:10px; color:#374151;
+      font-size:11px; font-weight:900; text-transform:uppercase;
+    }
     .nav-cta { display:flex; gap:8px; align-items:center; }
 
     .btn {
@@ -85,6 +89,15 @@
     .hero h1 { font-size: clamp(29px, 7vw, 56px); line-height: .98; letter-spacing: -1.3px; margin-bottom: 14px; }
     .hero p { color: #d1d5db; font-size: 15.5px; margin-bottom: 18px; max-width: 680px; }
     .hero-actions { display:grid; grid-template-columns: 1fr; gap:10px; }
+    .hero-lockup { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+    .hero-lockup img {
+      width:128px; height:46px; object-fit:contain; object-position:left center;
+      filter:drop-shadow(0 8px 14px rgba(0,0,0,.22));
+    }
+    .hero-lockup span {
+      border-left:1px solid rgba(255,255,255,.32); padding-left:12px;
+      color:#f3f4f6; font-size:12px; font-weight:900; text-transform:uppercase;
+    }
     .section { padding: 34px 0; }
     .section-title { margin-bottom: 18px; }
     .section-title.center { text-align:center; }
@@ -144,7 +157,7 @@
     }
     .mockup {
       position:relative; height: 220px; background:#fff; overflow:hidden;
-      border-bottom: 1px solid var(--line);
+      border-bottom: 1px solid var(--line); cursor:zoom-in;
     }
     .mockup img.product-img { width:100%; height:100%; object-fit: contain; object-position:center; display:block; }
     .image-fallback {
@@ -160,6 +173,14 @@
     .min { color:var(--muted); font-size: 12px; font-weight:800; text-align:right; }
     .qty-row { display:grid; grid-template-columns: 1fr 1fr; gap:10px; align-items:end; }
     .qty-row input { padding: 11px; }
+    .qty-quick { display:flex; gap:7px; flex-wrap:wrap; margin-top:9px; }
+    .qty-quick button {
+      min-width:38px; height:34px; border:1px solid var(--line); border-radius:10px;
+      background:#f9fafb; color:#374151; cursor:pointer; font-size:12px; font-weight:900;
+    }
+    .qty-quick button:hover, .qty-quick button:focus-visible {
+      border-color:var(--brand); color:var(--brand); background:#fff;
+    }
     .actions { display:grid; grid-template-columns: 1fr; gap:9px; margin-top: 10px; }
 
     .quote-sticky {
@@ -243,6 +264,7 @@
       .nav-cta .hide-mobile { display:none; }
       .brand strong { font-size: 14px; }
       .brand span { font-size: 10.5px; }
+      .brand-partner { display:none; }
       .hero { padding: 28px 0 22px; }
       .hero h1 { font-size: 34px; }
       .section { padding: 28px 0; }
@@ -261,11 +283,12 @@
       <header>
         <div class="container nav">
           <div class="brand">
-            <img class="brand-logo" src="ombu-rojo.png" alt="Ombú" />
+            <img class="brand-logo" src="assets/ombu-rojo.png" alt="Ombú" />
             <div>
               <strong>Annika | Ombú</strong>
               <span>Merchandising oficial</span>
             </div>
+            <div class="brand-partner">Catálogo comercial</div>
           </div>
           <div class="nav-cta">
             <a href="#catalogo" class="btn btn-small btn-ghost hide-mobile">Catálogo</a>
@@ -277,6 +300,10 @@
       <section class="hero">
         <div class="container hero-grid">
           <div>
+            <div class="hero-lockup">
+              <img src="assets/ombu-rojo.png" alt="Ombú" />
+              <span>por Annika</span>
+            </div>
             <div class="pill">Merchandising oficial Ombú</div>
             <h1>Catálogo digital Ombú.</h1>
             <p>
@@ -307,7 +334,7 @@
                 <div class="field">
                   <label>Logo de la empresa</label>
                   <input id="logoInput" type="file" accept="image/*" />
-                  <div class="hint">Formato recomendado: PNG o JPG.</div>
+                  <div class="hint">Formato recomendado: PNG o JPG, hasta 4 MB. El logo se adjunta al email del pedido.</div>
                 </div>
               </div>
 
@@ -398,7 +425,7 @@
                 <div style="height:12px"></div>
                 <a id="whatsappOrder" class="btn btn-green" target="_blank">Enviar pedido por WhatsApp a Annika</a>
                 <div style="height:9px"></div>
-                <a id="emailOrder" class="btn btn-blue">Enviar pedido por email</a>
+                <button id="emailOrder" class="btn btn-blue" type="button">Enviar pedido y logo por email</button>
                 <div style="height:9px"></div>
                 <a id="paymentOrder" class="btn btn-dark" target="_blank">Solicitar link de pago por WhatsApp</a>
                 <p class="hint" style="margin-top:9px">El pago se habilita con el link oficial de Mercado Pago de Annika. Hasta entonces, el botón solicita el link por WhatsApp con el pedido adjunto.</p>
@@ -440,6 +467,16 @@
             <p><b>Cantidad mínima:</b> <span id="modalMin"></span></p>
             <p><b>Personalización:</b> <span id="modalPers"></span></p>
             <p><b>Uso recomendado:</b> <span id="modalLead"></span></p>
+          </div>
+          <div class="field" style="margin:14px 0 0">
+            <label>Cantidad</label>
+            <input id="modalQty" type="number" min="1" max="500" value="1" />
+            <div class="qty-quick" aria-label="Cantidades rápidas">
+              <button type="button" onclick="setModalQty(1)">1</button>
+              <button type="button" onclick="setModalQty(10)">10</button>
+              <button type="button" onclick="setModalQty(20)">20</button>
+              <button type="button" onclick="setModalQty(50)">50</button>
+            </div>
           </div>
           <div style="height:14px"></div>
           <button id="modalAdd" class="btn btn-primary">Agregar al presupuesto</button>
@@ -596,6 +633,16 @@
     function handleLogoUpload(e) {
       const file = e.target.files && e.target.files[0];
       if (!file) return;
+      if (!file.type.startsWith("image/")) {
+        e.target.value = "";
+        toast("Seleccioná una imagen PNG o JPG.");
+        return;
+      }
+      if (file.size > 4 * 1024 * 1024) {
+        e.target.value = "";
+        toast("El logo supera el máximo permitido de 4 MB.");
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
         dealerLogo = reader.result;
@@ -643,7 +690,7 @@
         const qty = cart[p.id]?.qty || p.minQty;
         return `
           <article class="product-card">
-            <div class="mockup">
+            <div class="mockup" onclick="openProduct('${p.id}')" role="button" tabindex="0" onkeydown="if(event.key === 'Enter' || event.key === ' ') openProduct('${p.id}')" aria-label="Ampliar ${p.name}">
               <img class="product-img" src="${p.image}" alt="${p.name}" onerror="handleImageError(this)" />
             </div>
             <div class="product-body">
@@ -661,6 +708,12 @@
                 </div>
                 <button class="btn btn-primary" onclick="addToCart('${p.id}')">Agregar</button>
               </div>
+              <div class="qty-quick" aria-label="Cantidades rápidas">
+                <button type="button" onclick="setProductQty('${p.id}', 1)">1</button>
+                <button type="button" onclick="setProductQty('${p.id}', 10)">10</button>
+                <button type="button" onclick="setProductQty('${p.id}', 20)">20</button>
+                <button type="button" onclick="setProductQty('${p.id}', 50)">50</button>
+              </div>
               <div class="actions">
                 <button class="btn btn-light" onclick="openProduct('${p.id}')">Ver detalle</button>
                 <button class="btn btn-dark" onclick="quickWhatsApp('${p.id}')">Consultar por WhatsApp</button>
@@ -670,10 +723,16 @@
       }).join("");
     }
 
-    function addToCart(id) {
+    function setProductQty(id, qty) {
       const p = products.find(x => x.id === id);
       const input = $("qty-" + id);
-      const qty = clampQty(p, input?.value);
+      if (input) input.value = clampQty(p, qty);
+    }
+
+    function addToCart(id, requestedQty) {
+      const p = products.find(x => x.id === id);
+      const input = $("qty-" + id);
+      const qty = clampQty(p, requestedQty ?? input?.value);
       cart[id] = { qty };
       saveCart(); renderCart(); updateLinks();
       toast(`${p.name} agregado al presupuesto.`);
@@ -759,7 +818,6 @@
     function updateLinks() {
       const msg = buildMessage();
       $("whatsappOrder").href = `https://wa.me/${ANNIKA_WHATSAPP}?text=${msg}`;
-      $("emailOrder").href = `mailto:${ANNIKA_EMAIL}?subject=${encodeURIComponent("Pedido catálogo Ombú - " + dealerName)}&body=${encodeURIComponent(buildPlainMessage())}`;
       updatePaymentAction();
     }
 
@@ -812,15 +870,22 @@
       $("modalMin").textContent = `${p.minQty} unidad. Máximo ${p.maxQty} unidades`;
       $("modalPers").textContent = p.personalization;
       $("modalLead").textContent = p.lead;
+      $("modalQty").min = p.minQty;
+      $("modalQty").max = p.maxQty;
+      $("modalQty").value = cart[p.id]?.qty || $("qty-" + id)?.value || p.minQty;
       $("modalImg").style.display = "block";
       $("modalImgWrap").querySelector(".image-fallback")?.remove();
       $("modalImg").onerror = () => handleImageError($("modalImg"));
-      $("modalAdd").onclick = () => { addToCart(id); closeModal(); document.querySelector("#presupuesto").scrollIntoView({behavior:"smooth"}); };
+      $("modalAdd").onclick = () => { addToCart(id, $("modalQty").value); closeModal(); document.querySelector("#presupuesto").scrollIntoView({behavior:"smooth"}); };
       $("modalBackdrop").style.display = "flex";
+    }
+    function setModalQty(qty) {
+      const input = $("modalQty");
+      input.value = Math.min(Math.max(qty, parseInt(input.min, 10)), parseInt(input.max, 10));
     }
     function closeModal() { $("modalBackdrop").style.display = "none"; }
 
-    function guardBeforeSend(e) {
+    function validateOrder(e) {
       if (!cartItems().length) {
         e.preventDefault(); toast("Primero agregá al menos un producto al presupuesto."); return false;
       }
@@ -830,9 +895,51 @@
       if (!dealerName) {
         e.preventDefault(); toast("Completá el nombre de la empresa antes de continuar."); return false;
       }
+      return true;
+    }
+
+    function guardBeforeSend(e) {
+      if (!validateOrder(e)) return false;
       localStorage.setItem(STORAGE_KEYS.lastOrder, JSON.stringify({ dealerName, total: cartTotal(), items: cartItems(), date: new Date().toISOString() }));
       toast("Pedido preparado. Se abrirá el canal seleccionado.");
       return true;
+    }
+
+    async function sendOrderByEmail(e) {
+      if (!validateOrder(e)) return;
+      if (!dealerLogo) {
+        toast("Cargá el logo de la empresa antes de enviar el pedido por email.");
+        $("logoInput").focus();
+        return;
+      }
+      const button = $("emailOrder");
+      const previousText = button.textContent;
+      button.disabled = true;
+      button.textContent = "Enviando pedido...";
+      try {
+        const response = await fetch("/api/enviar-pedido", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            dealerName,
+            contactName: $("contactName").value.trim(),
+            buyerPhone: $("buyerPhone").value.trim(),
+            buyerEmail: $("buyerEmail").value.trim(),
+            notes: $("orderNotes").value.trim(),
+            logo: dealerLogo || "",
+            message: buildPlainMessage()
+          })
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || "No se pudo enviar el pedido.");
+        localStorage.setItem(STORAGE_KEYS.lastOrder, JSON.stringify({ dealerName, total: cartTotal(), items: cartItems(), date: new Date().toISOString() }));
+        toast("Pedido y logo enviados por email.");
+      } catch (error) {
+        toast(error.message + " Podés enviarlo por WhatsApp.");
+      } finally {
+        button.disabled = false;
+        button.textContent = previousText;
+      }
     }
 
     $("dealerName").value = dealerName;
@@ -843,7 +950,7 @@
     $("buyerEmail").addEventListener("input", updateLinks);
     $("orderNotes").addEventListener("input", updateLinks);
     $("whatsappOrder").addEventListener("click", guardBeforeSend);
-    $("emailOrder").addEventListener("click", guardBeforeSend);
+    $("emailOrder").addEventListener("click", sendOrderByEmail);
     $("paymentOrder").addEventListener("click", guardBeforeSend);
     $("modalBackdrop").addEventListener("click", (e) => { if (e.target.id === "modalBackdrop") closeModal(); });
 
