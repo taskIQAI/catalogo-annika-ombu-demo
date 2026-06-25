@@ -259,7 +259,10 @@
       margin-top:14px; display:inline-flex; align-items:center; justify-content:center; gap:8px;
       color:#6b7280; font-size:11px; font-weight:850;
     }
-    .taskiq-credit img { width:28px; height:28px; object-fit:contain; border-radius:6px; }
+    .taskiq-mark {
+      width:28px; height:28px; border-radius:6px; display:inline-grid; place-items:center;
+      background:#111827; color:#fff; font-size:10px; font-weight:950; letter-spacing:0;
+    }
 
     @media (min-width: 700px) {
       .app { border-radius: 0; }
@@ -478,7 +481,7 @@
           <span id="footerPhone">+54 9 341 616 3381</span> &#183; adm@annika.com.ar
           <div class="taskiq-credit">
             <span>Creado por TaskIQ</span>
-            <img src="assets/taskiq-logo.jpg" alt="TaskIQ" />
+            <span class="taskiq-mark" aria-label="TaskIQ">TIQ</span>
           </div>
         </div>
       </footer>
